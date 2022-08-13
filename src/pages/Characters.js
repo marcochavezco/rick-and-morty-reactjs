@@ -1,8 +1,9 @@
 import { Container } from "@mui/material";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import CharacterTable from "../components/tables/CharacterTable";
+import { fetchCharacters } from "../store/character-slice";
 
 const DUMMY_CHAR_LIST = {
   info: {
@@ -64,11 +65,19 @@ const DUMMY_CHAR_LIST = {
 };
 
 const Characters = () => {
+  const dispatch = useDispatch();
   const data = DUMMY_CHAR_LIST.results;
+
+  const { info, characters } = useSelector(state => state.characters);
+  console.log(characters, info, "state/char");
+
+  useEffect(() => {
+    dispatch(fetchCharacters());
+  }, [dispatch]);
 
   return (
     <Container>
-      <CharacterTable characters={data} />
+      <CharacterTable characters={characters} />
     </Container>
   );
 };
