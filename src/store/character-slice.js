@@ -5,31 +5,64 @@ const charactersSlice = createSlice({
   initialState: {
     info: {},
     characters: [],
+    charactersPerPage: 5,
   },
   reducers: {
-    getCharactersData(state, actions) {
-      const { info, results } = actions.payload;
-      console.log(info, results, "info/characters");
+    getCharactersInfo(state, action) {
+      const info = action.payload;
+      console.log(info, "info");
       state.info = info;
-      state.characters = results;
+    },
+    addNewCharacters(state, action) {
+      const characters = action.payload;
+      console.log(characters, "charstate");
+      characters.map(character => state.characters.push(character));
+    },
+    changeCharactersPerPage(state, action) {
+      console.log(action, "action");
+      state.charactersPerPage = action.payload;
     },
   },
 });
 
-export const fetchCharacters = () => {
+export const fetchInfo = () => {
   return async dispatch => {
     const sendRequest = async () => {
       const response = await fetch("https://rickandmortyapi.com/api/character");
 
       if (!response.ok) {
+        throw new Error("Characters info fetch failed");
+      }
+
+      const { info } = await response.json();
+
+      dispatch(characterActions.getCharactersInfo(info));
+    };
+
+    try {
+      await sendRequest();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+};
+
+export const fetchCharacters = charactersPerPage => {
+  return async dispatch => {
+    const sendRequest = async () => {
+      const response = await fetch(
+        `https://rickandmortyapi.com/api/character/${charactersPerPage}`
+      );
+
+      if (!response.ok) {
         throw new Error("Characters fetch failed");
       }
 
-      const { info, results } = await response.json();
+      const characters = await response.json();
 
-      dispatch(
-        characterActions.getCharactersData({ info: info, results: results })
-      );
+      console.log(characters, "fetchChar");
+
+      dispatch(characterActions.addNewCharacters(characters));
     };
 
     try {

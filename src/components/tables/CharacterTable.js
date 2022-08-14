@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Paper,
   Table,
   TableBody,
@@ -45,7 +46,11 @@ const CharacterTable = props => {
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter></TableFooter>
+        <TableFooter>
+          <Button onClick={event => props.onChangeCharRowsNumber(10)}>
+            Change
+          </Button>
+        </TableFooter>
       </Table>
     </TableContainer>
   );
