@@ -16,8 +16,6 @@ import React from "react";
 const CharacterTable = props => {
   const characterList = [...props.characters];
 
-  const handleChangePage = () => {};
-  const handleChangeRowsPerPage = () => {};
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 320 }} aria-label="characters table">
@@ -33,6 +31,7 @@ const CharacterTable = props => {
         <TableBody>
           {characterList.map(character => (
             <TableRow
+              onClick={event => props.onShowDetail(character.id)}
               key={character.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >

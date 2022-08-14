@@ -75,9 +75,16 @@ const Characters = () => {
     dispatch(fetchCharacters());
   }, [dispatch]);
 
+  const showDetailHandler = characterId => {
+    console.log(characterId);
+  };
+
   return (
-    <Container>
-      <CharacterTable characters={characters} />
+    <Container sx={{ mt: 2 }}>
+      <CharacterTable
+        characters={characters}
+        onShowDetail={showDetailHandler}
+      />
     </Container>
   );
 };
