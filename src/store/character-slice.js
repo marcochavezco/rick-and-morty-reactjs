@@ -3,9 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 const charactersSlice = createSlice({
   name: "characters",
   initialState: {
-    info: {},
+    info: { count: 0 },
     characters: [],
     charactersPerPage: 5,
+    page: 0,
   },
   reducers: {
     getCharactersInfo(state, action) {

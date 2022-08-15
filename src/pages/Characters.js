@@ -1,7 +1,6 @@
 import { Container } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route } from "react-router-dom";
 
 import CharacterTable from "../components/tables/CharacterTable";
 import ModalDetail from "../components/modal/ModalDetail";
@@ -76,19 +75,33 @@ const range = (size, startAt = 0) => {
 
 const Characters = () => {
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
+  // const [characterModal, setCharacterModal] = useState;
+
   // const data = DUMMY_CHAR_LIST.results;
 
-  const { characters, charactersPerPage } = useSelector(
+  const { characters, charactersPerPage, info } = useSelector(
     state => state.characters
   );
-  console.log(characters, characters.length, charactersPerPage, "charsss");
+  console.log(
+    characters,
+    characters.length,
+    charactersPerPage,
+    info.count,
+    typeof info.count,
+    "charsss"
+  );
 
-  const charactersToFetch = range(charactersPerPage, characters.length + 1);
-  console.log(charactersToFetch, "tofetc");
+  const charactersToFetch = useCallback(
+    range(charactersPerPage, characters.length + 1),
+    [charactersPerPage]
+  );
+  console.log(charactersToFetch, "tofetch");
 
   useEffect(() => {
     dispatch(fetchCharacters(charactersToFetch));
-  }, [dispatch, charactersPerPage]);
+  }, [dispatch, charactersToFetch]);
 
   useEffect(() => {
     dispatch(fetchInfo());
@@ -96,22 +109,34 @@ const Characters = () => {
 
   const showDetailHandler = characterId => {
     console.log(characterId);
+    setOpen(true);
+
+    // TODO: create an action that gives the characterId to reder the modal
   };
 
-  const changeCharRowsNumberHadler = numberCharRows => {
-    dispatch(characterActions.changeCharactersPerPage(10));
+  const closeModal = () => {
+    setOpen(false);
   };
+
+  const handleChangeRowsPerPage = event => {
+    const rowsPerPage = event.target.value;
+    console.log(rowsPerPage, "rowsperpage");
+    dispatch(characterActions.changeCharactersPerPage(+rowsPerPage));
+  };
+
+  const handleChangePage = () => {};
 
   return (
-    <Container sx={{ mt: 2 }}>
+    <Container sx={{ mt: 2, mb: 10 }}>
       <CharacterTable
+        count={info.count}
+        rowsPerPage={charactersPerPage}
         characters={characters}
         onShowDetail={showDetailHandler}
-        onChangeCharRowsNumber={changeCharRowsNumberHadler}
+        onChangeCharRowsNumber={handleChangeRowsPerPage}
+        onChangePage={handleChangePage}
       />
-      <Route path="/characters/">
-        <ModalDetail />
-      </Route>
+      {open && <ModalDetail open={open} onClose={closeModal} />}
     </Container>
   );
 };

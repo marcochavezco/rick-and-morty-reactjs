@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Box, Modal, Typography } from "@mui/material";
 
@@ -14,17 +14,11 @@ const style = {
   p: 4,
 };
 
-const ModalDetail = () => {
-  const [open, setIsOpen] = useState(false);
-
-  const openHandler = () => setIsOpen(true);
-
-  const closeHandler = () => setIsOpen(false);
-
+const ModalDetail = props => {
   return (
     <Modal
-      open={open}
-      onClose={closeHandler}
+      open={props.open}
+      onClose={props.onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
