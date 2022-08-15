@@ -81,7 +81,7 @@ const Characters = () => {
 
   // const data = DUMMY_CHAR_LIST.results;
 
-  const { characters, charactersPerPage, info } = useSelector(
+  const { characters, charactersPerPage, info, focusedCharacter } = useSelector(
     state => state.characters
   );
   console.log(
@@ -90,6 +90,7 @@ const Characters = () => {
     charactersPerPage,
     info.count,
     typeof info.count,
+    focusedCharacter,
     "charsss"
   );
 
@@ -111,11 +112,12 @@ const Characters = () => {
     console.log(characterId);
     setOpen(true);
 
-    // TODO: create an action that gives the characterId to reder the modal
+    dispatch(characterActions.focusCharacter(characterId));
   };
 
   const closeModal = () => {
     setOpen(false);
+    dispatch(characterActions.focusCharacter(null));
   };
 
   const handleChangeRowsPerPage = event => {

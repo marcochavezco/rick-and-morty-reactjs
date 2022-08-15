@@ -7,6 +7,7 @@ const charactersSlice = createSlice({
     characters: [],
     charactersPerPage: 5,
     page: 0,
+    focusedCharacter: {},
   },
   reducers: {
     getCharactersInfo(state, action) {
@@ -22,6 +23,23 @@ const charactersSlice = createSlice({
     changeCharactersPerPage(state, action) {
       console.log(action, "action");
       state.charactersPerPage = action.payload;
+    },
+    focusCharacter(state, action) {
+      const focusedCharacterId = action.payload;
+
+      console.log(focusedCharacterId, "focusId");
+
+      if (focusedCharacterId === null) {
+        state.focusedCharacter = {};
+      }
+
+      if (focusedCharacterId) {
+        const focusedCharacter = state.characters.find(character => {
+          return character.id === focusedCharacterId;
+        });
+
+        state.focusedCharacter = focusedCharacter;
+      }
     },
   },
 });

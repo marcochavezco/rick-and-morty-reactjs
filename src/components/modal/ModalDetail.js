@@ -1,6 +1,18 @@
 import React from "react";
 
-import { Box, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -8,6 +20,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
+  minWidth: 275,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -15,6 +28,18 @@ const style = {
 };
 
 const ModalDetail = props => {
+  const {
+    name,
+    status,
+    species,
+    type,
+    gender,
+    origin,
+    location,
+    image,
+    episode,
+  } = useSelector(state => state.characters.focusedCharacter);
+
   return (
     <Modal
       open={props.open}
@@ -22,13 +47,41 @@ const ModalDetail = props => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Text in a modal
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
+      <Box>
+        <Card sx={style}>
+          <CardActions edge="start">
+            <IconButton size="small" onClick={props.onClose}>
+              <ArrowBackIosIcon />
+            </IconButton>
+          </CardActions>
+          <CardMedia
+            sx={{ objectFit: "contain" }}
+            component="img"
+            height="200"
+            image={image}
+            alt={name}
+          ></CardMedia>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {status}
+            </Typography>
+            <Typography variant="h5" component="div">
+              {name}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              {`${species}${type ? `,${type}` : ""}`}
+            </Typography>
+            <Typography variant="body2">
+              {`Location: ${location.name}`}
+              <br />
+              {`Origin: ${origin.name}`}
+            </Typography>
+          </CardContent>
+        </Card>
       </Box>
     </Modal>
   );
